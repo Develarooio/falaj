@@ -23,5 +23,10 @@ func _physics_process(delta):
 	if is_on_floor():
 		if Input.is_action_pressed('jump'):
 			current_speed.y -= jump_height
+		if friction:
+			current_speed.x = lerp(current_speed.x, 0, .3)
 	else:
-		current_speed += gravity
+		current_speed.x = lerp(current_speed.x, 0, .2)
+		current_speed.y += gravity
+	
+	current_speed = move_and_slide(current_speed, UP)
