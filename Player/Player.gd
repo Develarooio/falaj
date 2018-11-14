@@ -12,6 +12,7 @@ func _ready():
 
 func _physics_process(delta):
 	var friction = false
+	current_speed = move_and_slide(current_speed, UP)
 	
 	if Input.is_action_pressed('right'):
 		current_speed.x = min(current_speed.x + accel, max_speed)
@@ -28,5 +29,6 @@ func _physics_process(delta):
 	else:
 		current_speed.x = lerp(current_speed.x, 0, .2)
 		current_speed.y += gravity
-	
-	current_speed = move_and_slide(current_speed, UP)
+
+func velocity():
+	return current_speed
