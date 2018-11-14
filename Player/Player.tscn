@@ -1,23 +1,29 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/blue_player_box.png" type="Texture" id=2]
+[ext_resource path="res://Player/BallPunch.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 32 )
 
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 33, 33 )
+
 [node name="Player" type="KinematicBody2D" groups=[
 "players",
 ]]
 
 input_pickable = false
-collision_layer = 1
-collision_mask = 1
+collision_layer = 3
+collision_mask = 3
 collision/safe_margin = 0.08
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Collision", "Transform" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0"]
 
@@ -28,5 +34,23 @@ _sections_unfolded = [ "Transform" ]
 
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
+
+[node name="BallPunch" type="Area2D" parent="." index="2" groups=[
+"players",
+]]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 3 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPunch" index="0"]
+
+shape = SubResource( 2 )
 
 
