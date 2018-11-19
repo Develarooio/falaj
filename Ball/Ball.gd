@@ -22,8 +22,7 @@ func _physics_process(delta):
 func _on_PlayerImpactDetector_area_entered(area):
 	if area.is_in_group('players'):
 		var collision_vector = (position - area.global_position).normalized()
-		#Eventually get multiplier from ze body
-		current_speed = collision_vector*300
+		current_speed = collision_vector*area.get_ball_power()
 		if abs(collision_vector.y) < .5:
 			current_speed.x *= 2
 			current_speed.y -= 300

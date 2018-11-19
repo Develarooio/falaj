@@ -14,8 +14,5 @@ func _ready():
 #	# Update game logic here.
 #	pass
 
-func velocity():
-	return get_parent().velocity()
-
-func get_ball_power():
-	return get_parent().get_ball_power()
+func get_params():
+	pass

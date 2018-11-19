@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Mutators/Mutator.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Mutator.gd" type="Script" id=2]
+[ext_resource path="res://Mutators/default_square.png" type="Texture" id=3]
+
+[node name="DefaultMutator" instance=ExtResource( 1 )]
+
+script = ExtResource( 2 )
+
+[node name="Sprite" parent="." index="1"]
+
+texture = ExtResource( 3 )
+
+[connection signal="area_entered" from="." to="." method="_on_DefaultMutator_area_entered"]
+
+

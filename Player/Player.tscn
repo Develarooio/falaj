@@ -35,7 +35,7 @@ _sections_unfolded = [ "Transform" ]
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="BallPunch" type="Area2D" parent="." index="2" groups=[
+[node name="Detector" type="Area2D" parent="." index="2" groups=[
 "players",
 ]]
 
@@ -49,8 +49,10 @@ audio_bus_name = "Master"
 script = ExtResource( 3 )
 _sections_unfolded = [ "Collision" ]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPunch" index="0"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector" index="0"]
 
 shape = SubResource( 2 )
+
+[connection signal="area_entered" from="Detector" to="." method="_on_Detector_area_entered"]
 
 
