@@ -1,8 +1,6 @@
 extends Area2D
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
+export var jump_height = 1000
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -14,8 +12,11 @@ func _ready():
 #	# Update game logic here.
 #	pass
 
-func velocity():
-	return get_parent().velocity()
+func get_params():
+	var params = {'jump_height': jump_height}
 
-func get_ball_power():
-	return get_parent().get_ball_power()
+	return params
+
+func _on_BirdMutator_area_entered(area):
+	if area.is_in_group('players'):
+		queue_free()
