@@ -14,6 +14,7 @@ func _ready():
 
 func get_params():
 	var params = {'jump_height': jump_height}
+
 	return params
 
 func _on_BirdMutator_area_entered(area):
