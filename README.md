@@ -16,13 +16,17 @@
     - stuns them momentarily
     - if they are carrying the ball, causes them to drop the ball
 * Players start out in a random pure state
+* There are mutators which:
+    - Can be consumed by colliding with them
+    - Respawn after x time after consumption
+    - Spawn in predetermined locations in each map
 
 
 A player's composition transitions as follows where one step in the flow is made by touching a mutator:
 
 100/0/0 -> 50/50/0 -> 33/33/33 -> 25/25/50 -> 50/0/50 -> 0/0/100
                                            -> 0/0/100
-                                           
+
 Mutators are placed randomly around the map
 
 * Bear:
