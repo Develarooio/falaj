@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Tilesets/basic_black_wall.tres" type="TileSet" id=1]
 [ext_resource path="res://Ball/Ball.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Mutators/BirdMutator.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Mutators/DefaultMutator.tscn" type="PackedScene" id=5]
 
 [node name="TestLevel" type="Node2D"]
 
@@ -37,13 +35,5 @@ _sections_unfolded = [ "Collision", "Linear" ]
 [node name="Player" parent="." index="2" instance=ExtResource( 3 )]
 
 position = Vector2( 174, 541 )
-
-[node name="BirdMutator" parent="." index="3" instance=ExtResource( 4 )]
-
-position = Vector2( 726, 987 )
-
-[node name="DefaultMutator" parent="." index="4" instance=ExtResource( 5 )]
-
-position = Vector2( 1097, 989 )
 
 
