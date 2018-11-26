@@ -11,23 +11,29 @@ var accel = 200
 var gravity = 25
 var jump_height
 var current_speed = Vector2()
+export var player_number = 1
+
+var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1_jump', 'punch' : 'p1_punch'},
+					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
+var actions = {}
 
 func _ready():
 	set_defaults()
+	assign_actions()
 
 func _physics_process(delta):
 	var friction = false
 	current_speed = move_and_slide(current_speed, UP)
 	
-	if Input.is_action_pressed('right'):
+	if Input.is_action_pressed(actions['right']):
 		current_speed.x = min(current_speed.x + accel, max_speed)
-	elif Input.is_action_pressed('left'):
+	elif Input.is_action_pressed(actions['left']):
 		current_speed.x = max(current_speed.x - accel, -max_speed)
 	else:
 		friction = true
 	
 	if is_on_floor():
-		if Input.is_action_pressed('jump'):
+		if Input.is_action_pressed(actions['jump']):
 			current_speed.y -= jump_height
 		if friction:
 			current_speed.x = lerp(current_speed.x, 0, .3)
@@ -44,16 +50,6 @@ func _on_Detector_area_entered(area):
 		var new_params = area.get_params()
 		assign_params(new_params)
 
-func assign_params(params):
-	#Hmmmmm on second thought this is stupid.  Maybe the player should just have all of this info
-	#and the mutators are just a flag to switch?  HMMMM HMMMM I DUNNO
-	if params.has('default'):
-		set_defaults()
-	if params.has('jump_height'):
-		jump_height = params['jump_height']
-	if params.has('max_speed'):
-		max_speed = params['max_speed']
-
 func set_defaults():
 	max_speed = DEFAULT_MAX_SPEED
 	jump_height = DEFAULT_JUMP_HEIGHT
@@ -61,3 +57,9 @@ func set_defaults():
 
 func get_ball_power():
 	return ball_power
+
+func assign_actions():
+	if player_number == 1:
+		actions = players_action_arr[0]
+	else:
+		actions = players_action_arr[1]
