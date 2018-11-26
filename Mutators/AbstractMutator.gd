@@ -24,7 +24,7 @@ func reset():
 	$Sprite.set("modulate", Color(255,255,255,255))
 
 func _on_AbstractMutator_body_entered(body):
-	if not dormant:
+	if not dormant and body.is_in_group("players"):
 		body.consume_mutator(get_type())
 		consume()
 
