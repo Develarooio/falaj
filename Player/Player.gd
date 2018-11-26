@@ -63,3 +63,7 @@ func assign_actions():
 		actions = players_action_arr[0]
 	else:
 		actions = players_action_arr[1]
+
+func consume_mutator(mutator_type):
+	print(mutator_type)
+
