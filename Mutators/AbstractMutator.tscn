@@ -2,7 +2,6 @@
 
 [ext_resource path="res://Mutators/AbstractMutator.gd" type="Script" id=1]
 
-
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
@@ -31,5 +30,7 @@ process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = false
+
+[connection signal="body_entered" from="." to="." method="_on_AbstractMutator_body_entered"]
 
 

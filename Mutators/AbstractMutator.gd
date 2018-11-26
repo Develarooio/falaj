@@ -5,11 +5,12 @@ extends Area2D
 # var b = "textvar"
 
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	pass
+	print(get_type())
+	
 
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
+
+func consume(body):
+	print(get_type())
+
+func _on_AbstractMutator_body_entered(body):
+	consume()
