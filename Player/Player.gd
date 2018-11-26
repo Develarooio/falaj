@@ -17,9 +17,25 @@ var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1
 					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
 var actions = {}
 
+var entity_colors = {
+		"BIRD": [255,0,0,255],
+		"SNAKE": [0,255,0,255],
+		"BEAR": [0,0,255, 255]
+	}
+
+var mutation_state = []
+
 func _ready():
+	randomize()
+	init_composition()
 	set_defaults()
 	assign_actions()
+
+func init_composition():
+	var rand_int = floor(rand_range(0,3))
+	print(rand_int)
+	var comp = entity_colors.keys()[rand_int]
+	consume_mutator(comp)
 
 func _physics_process(delta):
 	var friction = false
@@ -64,6 +80,53 @@ func assign_actions():
 	else:
 		actions = players_action_arr[1]
 
+func _set_comp_color(c):
+	print(c)
+	var color = Color(c[0], c[1], c[2], c[3])
+	$CompositionIndicator.set("modulate", color)
+
+func _get_current_comp_color_array():
+	var num_mutations = mutation_state.size()
+	var next_colors = [0,0,0,0]
+	
+	for mut in mutation_state:
+		var color_array = entity_colors[mut]
+		for i in range(0,4):
+			next_colors[i] = next_colors[i] + color_array[i]
+	
+	for i in range(0,4):
+		next_colors[i] = next_colors[i] / num_mutations
+	
+	return next_colors
+
+func _get_majority_comp():
+	for i in entity_colors.keys():
+		if mutation_state.count(i) == 2:
+			return i
+
 func consume_mutator(mutator_type):
-	print(mutator_type)
+	if mutation_state.size() == 1:
+		if mutator_type == mutation_state[0]:
+			return
+	
+	if mutation_state.size() == 2:
+		if mutation_state.has(mutator_type):
+			mutation_state = [mutator_type]
+			return
+
+	if mutation_state.size() == 4:
+		var maj_comp = _get_majority_comp()
+		# If we are in 50/25/25 and a mutator of the same type
+		# as the 50 comes in, convert to 100% of that
+		if mutator_type == maj_comp:
+			mutation_state == [mutator_type]
+		# otherwise, revert to 50/50
+		else:
+			mutation_state = [mutator_type, maj_comp]
+		
+		return
+		
+	mutation_state.push_back(mutator_type)
+		
+	_set_comp_color(_get_current_comp_color_array())
 
