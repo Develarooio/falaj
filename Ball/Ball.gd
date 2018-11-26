@@ -7,10 +7,6 @@ var bounce_coefficent = 0.7
 var held = false
 var player = null
 
-func _ready():
-	#initial velocity
-	current_speed = Vector2(50, 0)
-
 func _physics_process(delta):
 	if !held:
 		var collision = move_and_collide(current_speed * delta)
@@ -28,3 +24,7 @@ func _on_PlayerImpactDetector_area_entered(area):
 	if area.is_in_group('players'):
 		player = area
 		held = true
+
+func release(direction):
+	current_speed = direction
+	held = false
