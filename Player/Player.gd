@@ -13,6 +13,12 @@ var punch
 var jump
 var max_speed = 1000
 
+
+# Health related state
+var stunned = false
+var health = 100
+var can_heal = true
+
 var current_speed = Vector2()
 export var player_number = 1
 
@@ -46,16 +52,75 @@ var mutation_state = []
 func _ready():
 	randomize()
 	init_composition()
-	set_defaults()
 	assign_actions()
+
+#######################
+# HEALTH AND STUNNING #
+#######################
+
+func stun():
+	stunned = true
+	$Sprite/AnimationPlayer.play("shake")
+	$StunTimer.start()
+
+func _on_StunTimer_timeout():
+	stunned = false
+	$HPRechargeIncTimer.start()
+
+func _on_HPRechargeIncTimer_timeout():
+	health += 2
+	if health >= 100:
+		health = 100
+		$HPRechargeIncTimer.stop()
+
+func _on_HPRechargeDebounceTimer_timeout():
+	# start healing
+	$Debouncing.hide()
+	if not stunned:
+		$HPRechargeIncTimer.start()
+
+func _debounce_heal():
+	$Debouncing.show()
+	$HPRechargeDebounceTimer.start()
+
+func inflict_damage(dmg):
+	health -= dmg
+	$HPRechargeIncTimer.stop()
+	if health < 0:
+		health = 0
+	
+	if health == 0:
+		stun()
+	else:
+		_debounce_heal()
+
+##################
+# INITIALIZATION #
+##################
 
 func init_composition():
 	var rand_int = floor(rand_range(0,3))
 	var comp = entity_traits.keys()[rand_int]
 	consume_mutator(comp)
 
+func assign_actions():
+	if player_number == 1:
+		actions = players_action_arr[0]
+	else:
+		actions = players_action_arr[1]
+
+############
+# MOVEMENT #
+############
+
 func _physics_process(delta):
 	var friction = false
+	$TmpHealthLabel.set("text", str(health))
+	# early return and do no physics processing if currently stunned
+	if stunned:
+		current_speed.x = 0
+		return
+	
 	current_speed = move_and_slide(current_speed, UP)
 	
 	if Input.is_action_pressed(actions['right']):
@@ -74,23 +139,9 @@ func _physics_process(delta):
 		current_speed.x = lerp(current_speed.x, 0, .2)
 		current_speed.y += gravity
 
-func _on_Detector_area_entered(area):
-	#Check if its a mutator
-	if area.is_in_group('mutators'):
-		var new_params = area.get_params()
-		assign_params(new_params)
-
-func set_defaults():
-	ball_power = DEFAULT_BALL_POWER
-
-func get_ball_power():
-	return ball_power
-
-func assign_actions():
-	if player_number == 1:
-		actions = players_action_arr[0]
-	else:
-		actions = players_action_arr[1]
+############
+# MUTATION #
+############
 
 func _set_comp_color(c):
 	var color = Color(c[0], c[1], c[2])
@@ -165,8 +216,4 @@ func consume_mutator(mutator_type):
 	jump = new_jump
 	speed = new_speed
 	punch = new_punch
-	print(jump)
-	print(speed)
-	print(punch)
 	_set_comp_color(color)
-
