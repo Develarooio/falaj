@@ -5,6 +5,7 @@
 
 [node name="Player2" instance=ExtResource( 1 )]
 
+collision_layer = 2
 player_number = 2
 
 [node name="Sprite" parent="." index="1"]

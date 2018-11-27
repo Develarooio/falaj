@@ -34,12 +34,17 @@ tracks/0/keys = {
 custom_solver_bias = 0.0
 extents = Vector2( 33, 33 )
 
+[sub_resource type="RectangleShape2D" id=3]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 10 )
+
 [node name="Player" type="KinematicBody2D" groups=[
 "players",
 ]]
 
 input_pickable = false
-collision_layer = 1
+collision_layer = 2
 collision_mask = 2
 collision/safe_margin = 0.08
 script = ExtResource( 1 )
@@ -166,4 +171,48 @@ max_lines_visible = -1
 
 [connection signal="timeout" from="HPRechargeDebounceTimer" to="." method="_on_HPRechargeDebounceTimer_timeout"]
 
+[node name="Fist" type="Area2D" parent="." index="3"]
 
+visible = false
+z_index = 1
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Transform", "Z Index" ]
+
+[node name="Sprite" type="Sprite" parent="Fist" index="0"]
+
+position = Vector2( 32, 0 )
+scale = Vector2( 1, 0.33 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Offset", "Region", "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fist" index="1"]
+
+position = Vector2( 32, 0 )
+shape = SubResource( 3 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="PunchCoolDown" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = true
+autostart = false
+
+[node name="PunchDuration" type="Timer" parent="." index="5"]
+
+process_mode = 1
+wait_time = 0.2
+one_shot = true
+autostart = false
+
+[connection signal="area_entered" from="Detector" to="." method="_on_Detector_area_entered"]
+
+[connection signal="timeout" from="PunchCoolDown" to="." method="_on_PunchCoolDown_timeout"]
+
+[connection signal="timeout" from="PunchDuration" to="." method="_on_PunchDuration_timeout"]

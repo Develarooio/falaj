@@ -21,6 +21,7 @@ var can_heal = true
 
 var current_speed = Vector2()
 export var player_number = 1
+var direction = 1
 
 var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1_jump', 'punch' : 'p1_punch'},
 					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
@@ -48,6 +49,8 @@ var entity_traits = {
 	}
 
 var mutation_state = []
+
+var can_punch = true
 
 func _ready():
 	randomize()
@@ -114,6 +117,9 @@ func assign_actions():
 ############
 
 func _physics_process(delta):
+	#if $PunchCoolDown.paused() == false:
+	#	print('punch is cooling down')
+		
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
 	# early return and do no physics processing if currently stunned
@@ -124,11 +130,16 @@ func _physics_process(delta):
 	current_speed = move_and_slide(current_speed, UP)
 	
 	if Input.is_action_pressed(actions['right']):
+		direction = 1
 		current_speed.x = min(current_speed.x + speed, max_speed)
 	elif Input.is_action_pressed(actions['left']):
+		direction = -1
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
+	
+	if Input.is_action_just_pressed(actions['punch']) and can_punch:
+		punch()
 	
 	if is_on_floor():
 		if Input.is_action_pressed(actions['jump']):
@@ -217,3 +228,19 @@ func consume_mutator(mutator_type):
 	speed = new_speed
 	punch = new_punch
 	_set_comp_color(color)
+
+func _on_PunchCoolDown_timeout():
+	can_punch = true
+	
+func _on_PunchDuration_timeout():
+	$Fist.visible = false
+	$PunchCoolDown.start()
+
+func punch():
+	can_punch = false
+	if direction == 1:
+		$Fist.scale.x = 1
+	else:
+		$Fist.scale.x = -1
+	$Fist.visible = true
+	$PunchDuration.start()
