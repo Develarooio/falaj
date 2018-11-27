@@ -51,6 +51,7 @@ var entity_traits = {
 var mutation_state = []
 
 var can_punch = true
+var holding = false
 
 func _ready():
 	randomize()
@@ -138,7 +139,7 @@ func _physics_process(delta):
 	else:
 		friction = true
 	
-	if Input.is_action_just_pressed(actions['punch']) and can_punch:
+	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
 		punch()
 	
 	if is_on_floor():
@@ -244,3 +245,6 @@ func punch():
 		$Fist.scale.x = -1
 	$Fist.visible = true
 	$PunchDuration.start()
+
+func set_holding(val):
+	holding = val

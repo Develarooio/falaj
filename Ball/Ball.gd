@@ -24,6 +24,7 @@ func _on_PlayerImpactDetector_area_entered(area):
 	if area.is_in_group('players'):
 		player = area
 		held = true
+		player.set_holding(true)
 
 func release(direction):
 	current_speed = direction
