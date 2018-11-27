@@ -70,7 +70,7 @@ tracks/1/keys = {
 "values": [ Vector2( -32, 0 ), Vector2( 0, 0 ) ]
 }
 
-[node name="Player" type="KinematicBody2D" groups=[
+[node name="Player" type="KinematicBody2D" index="0" groups=[
 "players",
 ]]
 

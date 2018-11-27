@@ -22,6 +22,7 @@ var can_heal = true
 var current_speed = Vector2()
 export var player_number = 1
 var direction = 1
+var releasable = true
 
 var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1_jump', 'punch' : 'p1_punch'},
 					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
@@ -139,12 +140,14 @@ func _physics_process(delta):
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
-	
+		
 	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
 		#Charge Punch
 		charge_punch()
-	elif Input.is_action_just_released(actions['punch']):
+		releasable = true
+	elif Input.is_action_just_released(actions['punch']) and releasable:
 		#Release Punch
+		releasable = false
 		punch()
 	
 	if is_on_floor():
@@ -245,7 +248,6 @@ func _on_PunchDuration_timeout():
 func punch():
 	$PunchIndicator.visible = false
 	can_punch = false
-	$AnimationPlayer.play('punch_charge_bar')
 	if direction == 1:
 		$Fist.scale.x = 1
 	else:
