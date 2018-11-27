@@ -7,6 +7,7 @@ var dormant;
 
 func _ready():
 	dormant = false
+	$Sprite.set("modulate", get_color())
 
 # Called when a player collides with the mutator
 # Sets the mutators state to dormant so that other collisions will not
@@ -21,7 +22,7 @@ func reset():
 	print("resetting")
 	dormant = false
 	$RespawnTimer.stop()
-	$Sprite.set("modulate", Color(255,255,255,255))
+	$Sprite.set("modulate", get_color())
 
 func _on_AbstractMutator_body_entered(body):
 	if not dormant and body.is_in_group("players"):

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/blue_player_box.png" type="Texture" id=2]
 [ext_resource path="res://Player/BallPunch.gd" type="Script" id=3]
+[ext_resource path="res://Mutators/default_square.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -14,7 +15,7 @@ extents = Vector2( 32, 32 )
 custom_solver_bias = 0.0
 extents = Vector2( 33, 33 )
 
-[node name="Player" type="KinematicBody2D" index="0" groups=[
+[node name="Player" type="KinematicBody2D" groups=[
 "players",
 ]]
 
@@ -53,6 +54,14 @@ _sections_unfolded = [ "Collision" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detector" index="0"]
 
 shape = SubResource( 2 )
+
+[node name="CompositionIndicator" type="Sprite" parent="." index="3"]
+
+position = Vector2( 3.05176e-05, -76.1108 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 8, 8 )
+_sections_unfolded = [ "Region", "Transform", "Visibility" ]
 
 [connection signal="area_entered" from="Detector" to="." method="_on_Detector_area_entered"]
 
