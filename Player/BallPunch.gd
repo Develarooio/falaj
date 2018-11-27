@@ -19,3 +19,6 @@ func velocity():
 
 func get_ball_power():
 	return get_parent().get_ball_power()
+
+func set_holding(val):
+	get_parent().set_holding(val)

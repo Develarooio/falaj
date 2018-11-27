@@ -11,4 +11,8 @@ player_number = 2
 
 texture = ExtResource( 2 )
 
+[node name="Sprite" parent="Fist" index="0"]
+
+texture = ExtResource( 2 )
+
 

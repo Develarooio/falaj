@@ -21,6 +21,8 @@ var can_heal = true
 
 var current_speed = Vector2()
 export var player_number = 1
+var direction = 1
+var releasable = true
 
 var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1_jump', 'punch' : 'p1_punch'},
 					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
@@ -31,28 +33,32 @@ var entity_traits = {
 			"color": [1.0,0,0],
 			"speed": 200,
 			"jump": 1200,
-			"punch": 2.0
+			"punch": 1.0
 		},
 		"SNAKE": {
 			"color": [0,1.0,0],
 			"speed": 600,
 			"jump": 700,
-			"punch": 2.0
+			"punch": 1.0
 		},
 		"BEAR":  {
 			"color": [0,0,1.0],
 			"speed": 100,
 			"jump": 800,
-			"punch": 10.0
+			"punch": 5.0
 		}
 	}
 
 var mutation_state = []
 
+var can_punch = true
+var holding = false
+
 func _ready():
 	randomize()
 	init_composition()
 	assign_actions()
+	
 
 #######################
 # HEALTH AND STUNNING #
@@ -114,6 +120,9 @@ func assign_actions():
 ############
 
 func _physics_process(delta):
+	#if $PunchCoolDown.paused() == false:
+	#	print('punch is cooling down')
+		
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
 	# early return and do no physics processing if currently stunned
@@ -124,11 +133,22 @@ func _physics_process(delta):
 	current_speed = move_and_slide(current_speed, UP)
 	
 	if Input.is_action_pressed(actions['right']):
+		direction = 1
 		current_speed.x = min(current_speed.x + speed, max_speed)
 	elif Input.is_action_pressed(actions['left']):
+		direction = -1
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
+		
+	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
+		#Charge Punch
+		charge_punch()
+		releasable = true
+	elif Input.is_action_just_released(actions['punch']) and releasable:
+		#Release Punch
+		releasable = false
+		punch()
 	
 	if is_on_floor():
 		if Input.is_action_pressed(actions['jump']):
@@ -217,3 +237,30 @@ func consume_mutator(mutator_type):
 	speed = new_speed
 	punch = new_punch
 	_set_comp_color(color)
+
+func _on_PunchCoolDown_timeout():
+	can_punch = true
+	
+func _on_PunchDuration_timeout():
+	$Fist.visible = false
+	$PunchCoolDown.start()
+
+func punch():
+	$PunchIndicator.visible = false
+	can_punch = false
+	if direction == 1:
+		$Fist.scale.x = 1
+	else:
+		$Fist.scale.x = -1
+	$Fist.visible = true
+	$PunchDuration.start()
+
+func charge_punch():
+	$PunchIndicator.visible = true
+	$AnimationPlayer.play('punch_charge_bar', -1, punch)
+
+func set_holding(val):
+	holding = val
+
+func _on_PunchChargeDuration_timeout():
+	##Fully charged
