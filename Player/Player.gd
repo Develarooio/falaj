@@ -57,6 +57,7 @@ func _ready():
 	randomize()
 	init_composition()
 	assign_actions()
+	
 
 #######################
 # HEALTH AND STUNNING #
@@ -140,6 +141,10 @@ func _physics_process(delta):
 		friction = true
 	
 	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
+		#Charge Punch
+		charge_punch()
+	elif Input.is_action_just_released(actions['punch']):
+		#Release Punch
 		punch()
 	
 	if is_on_floor():
@@ -238,7 +243,9 @@ func _on_PunchDuration_timeout():
 	$PunchCoolDown.start()
 
 func punch():
+	$PunchIndicator.visible = false
 	can_punch = false
+	$AnimationPlayer.play('punch_charge_bar')
 	if direction == 1:
 		$Fist.scale.x = 1
 	else:
@@ -246,5 +253,12 @@ func punch():
 	$Fist.visible = true
 	$PunchDuration.start()
 
+func charge_punch():
+	$PunchIndicator.visible = true
+	$AnimationPlayer.play('punch_charge_bar')
+
 func set_holding(val):
 	holding = val
+
+func _on_PunchChargeDuration_timeout():
+	##Fully charged

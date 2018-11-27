@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/blue_player_box.png" type="Texture" id=2]
@@ -38,6 +38,37 @@ extents = Vector2( 33, 33 )
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 10 )
+
+[sub_resource type="Animation" id=4]
+
+resource_name = "punch_charge_bar"
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("PunchIndicator:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0.2 ), Vector2( 1, 0.2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("PunchIndicator:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -32, 0 ), Vector2( 0, 0 ) ]
+}
 
 [node name="Player" type="KinematicBody2D" groups=[
 "players",
@@ -211,16 +242,37 @@ wait_time = 0.2
 one_shot = true
 autostart = false
 
-[node name="PunchIndicator" type="Sprite" parent="." index="6"]
+[node name="PunchChargeDuration" type="Timer" parent="." index="6"]
 
+process_mode = 1
+wait_time = 1.0
+one_shot = true
+autostart = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/punch_charge_bar = SubResource( 4 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="PunchIndicator" type="Sprite" parent="." index="8"]
+
+visible = false
 scale = Vector2( 1, 0.2 )
 z_index = 2
 texture = ExtResource( 4 )
 offset = Vector2( 0, -210 )
-_sections_unfolded = [ "Offset", "Transform", "Z Index" ]
+_sections_unfolded = [ "Offset", "Transform", "Visibility", "Z Index" ]
 
 [connection signal="area_entered" from="Detector" to="." method="_on_Detector_area_entered"]
 
 [connection signal="timeout" from="PunchCoolDown" to="." method="_on_PunchCoolDown_timeout"]
 
 [connection signal="timeout" from="PunchDuration" to="." method="_on_PunchDuration_timeout"]
+
+[connection signal="timeout" from="PunchChargeDuration" to="." method="_on_PunchChargeDuration_timeout"]
