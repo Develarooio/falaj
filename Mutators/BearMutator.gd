@@ -5,7 +5,7 @@ extends "res://Mutators/AbstractMutator.gd"
 # var b = "textvar"
 
 func get_type():
-	return "BIRD"
+	return "BEAR"
 
 func get_color():
-	return Color(255,0,0,255)
+	return Color(0,0,255,255)
