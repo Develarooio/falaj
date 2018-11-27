@@ -57,7 +57,7 @@ shape = SubResource( 2 )
 
 [node name="CompositionIndicator" type="Sprite" parent="." index="3"]
 
-position = Vector2( 0.329498, -54.0354 )
+position = Vector2( 3.05176e-05, -76.1108 )
 scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 4 )
 region_rect = Rect2( 0, 0, 8, 8 )

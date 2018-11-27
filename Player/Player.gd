@@ -10,6 +10,12 @@ var max_speed
 var accel = 200
 var gravity = 25
 var jump_height
+
+# Mutatable attributes
+var speed
+var punch
+var jump
+
 var current_speed = Vector2()
 export var player_number = 1
 
@@ -17,10 +23,25 @@ var players_action_arr = [{'right' : 'p1_right','left' : 'p1_left', 'jump' : 'p1
 					{'right' : 'p2_right', 'left' : 'p2_left', 'jump' : 'p2_jump', 'punch' : 'p2_punch'}]
 var actions = {}
 
-var entity_colors = {
-		"BIRD": [255,0,0,255],
-		"SNAKE": [0,255,0,255],
-		"BEAR": [0,0,255, 255]
+var entity_traits = {
+		"BIRD": {
+			"color": [1.0,0,0],
+			"speed": 5.0,
+			"jump": 10.0,
+			"punch": 2.0
+		},
+		"SNAKE": {
+			"color": [0,1.0,0],
+			"speed": 10.0,
+			"jump": 5.0,
+			"punch": 2.0
+		},
+		"BEAR":  {
+			"color": [0,0,1.0],
+			"speed": 5.0,
+			"jump": 4.0,
+			"punch": 10.0
+		}
 	}
 
 var mutation_state = []
@@ -33,8 +54,7 @@ func _ready():
 
 func init_composition():
 	var rand_int = floor(rand_range(0,3))
-	print(rand_int)
-	var comp = entity_colors.keys()[rand_int]
+	var comp = entity_traits.keys()[rand_int]
 	consume_mutator(comp)
 
 func _physics_process(delta):
@@ -81,37 +101,49 @@ func assign_actions():
 		actions = players_action_arr[1]
 
 func _set_comp_color(c):
-	print(c)
-	var color = Color(c[0], c[1], c[2], c[3])
-	$CompositionIndicator.set("modulate", color)
+	var color = Color(c[0], c[1], c[2])
+
+	$CompositionIndicator.modulate = color
+
+func _current_num_mutators():
+	return mutation_state.size()
+
+func _get_mutated_attr(attr):
+	var num_mutations = _current_num_mutators()
+	var new_attr_val = 0
+	for mut in mutation_state:
+		new_attr_val += entity_traits[mut][attr]
+	
+	return new_attr_val / num_mutations
 
 func _get_current_comp_color_array():
 	var num_mutations = mutation_state.size()
-	var next_colors = [0,0,0,0]
+	var next_colors = [0,0,0]
 	
 	for mut in mutation_state:
-		var color_array = entity_colors[mut]
-		for i in range(0,4):
+		var color_array = entity_traits[mut]["color"]
+		for i in range(0,3):
 			next_colors[i] = next_colors[i] + color_array[i]
-	
-	for i in range(0,4):
+
+	for i in range(0,3):
 		next_colors[i] = next_colors[i] / num_mutations
 	
 	return next_colors
 
 func _get_majority_comp():
-	for i in entity_colors.keys():
+	for i in entity_traits.keys():
 		if mutation_state.count(i) == 2:
 			return i
 
-func consume_mutator(mutator_type):
+func adjust_composition(mutator_type):
 	if mutation_state.size() == 1:
 		if mutator_type == mutation_state[0]:
 			return
 	
 	if mutation_state.size() == 2:
 		if mutation_state.has(mutator_type):
-			mutation_state = [mutator_type]
+			mutation_state.clear()
+			mutation_state.push_back(mutator_type)
 			return
 
 	if mutation_state.size() == 4:
@@ -119,14 +151,30 @@ func consume_mutator(mutator_type):
 		# If we are in 50/25/25 and a mutator of the same type
 		# as the 50 comes in, convert to 100% of that
 		if mutator_type == maj_comp:
-			mutation_state == [mutator_type]
+			mutation_state.clear()
+			mutation_state.push_back(mutator_type)
 		# otherwise, revert to 50/50
 		else:
-			mutation_state = [mutator_type, maj_comp]
+			mutation_state.clear()
+			mutation_state.push_back(mutator_type)
+			mutation_state.push_back(maj_comp)
 		
 		return
 		
 	mutation_state.push_back(mutator_type)
-		
-	_set_comp_color(_get_current_comp_color_array())
+
+	
+func consume_mutator(mutator_type):
+	adjust_composition(mutator_type)
+	var color = _get_current_comp_color_array()
+	var new_jump = _get_mutated_attr("jump")
+	var new_speed = _get_mutated_attr("speed")
+	var new_punch = _get_mutated_attr("punch")
+	jump = new_jump
+	speed = new_speed
+	punch = new_punch
+	print(jump)
+	print(speed)
+	print(punch)
+	_set_comp_color(color)
 
