@@ -1,20 +1,17 @@
 extends KinematicBody2D
 
-var DEFAULT_MAX_SPEED = 600
-var DEFAULT_JUMP_HEIGHT = 700
 var UP = Vector2(0, -1)
 var DEFAULT_BALL_POWER = 300
 
 var ball_power
-var max_speed
-var accel = 200
 var gravity = 25
-var jump_height
+
 
 # Mutatable attributes
 var speed
 var punch
 var jump
+var max_speed = 1000
 
 var current_speed = Vector2()
 export var player_number = 1
@@ -26,20 +23,20 @@ var actions = {}
 var entity_traits = {
 		"BIRD": {
 			"color": [1.0,0,0],
-			"speed": 5.0,
-			"jump": 10.0,
+			"speed": 200,
+			"jump": 1200,
 			"punch": 2.0
 		},
 		"SNAKE": {
 			"color": [0,1.0,0],
-			"speed": 10.0,
-			"jump": 5.0,
+			"speed": 600,
+			"jump": 700,
 			"punch": 2.0
 		},
 		"BEAR":  {
 			"color": [0,0,1.0],
-			"speed": 5.0,
-			"jump": 4.0,
+			"speed": 100,
+			"jump": 800,
 			"punch": 10.0
 		}
 	}
@@ -62,23 +59,20 @@ func _physics_process(delta):
 	current_speed = move_and_slide(current_speed, UP)
 	
 	if Input.is_action_pressed(actions['right']):
-		current_speed.x = min(current_speed.x + accel, max_speed)
+		current_speed.x = min(current_speed.x + speed, max_speed)
 	elif Input.is_action_pressed(actions['left']):
-		current_speed.x = max(current_speed.x - accel, -max_speed)
+		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
 	
 	if is_on_floor():
 		if Input.is_action_pressed(actions['jump']):
-			current_speed.y -= jump_height
+			current_speed.y -= jump
 		if friction:
 			current_speed.x = lerp(current_speed.x, 0, .3)
 	else:
 		current_speed.x = lerp(current_speed.x, 0, .2)
 		current_speed.y += gravity
-
-func velocity():
-	return current_speed
 
 func _on_Detector_area_entered(area):
 	#Check if its a mutator
@@ -87,8 +81,6 @@ func _on_Detector_area_entered(area):
 		assign_params(new_params)
 
 func set_defaults():
-	max_speed = DEFAULT_MAX_SPEED
-	jump_height = DEFAULT_JUMP_HEIGHT
 	ball_power = DEFAULT_BALL_POWER
 
 func get_ball_power():
