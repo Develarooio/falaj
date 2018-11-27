@@ -33,19 +33,19 @@ var entity_traits = {
 			"color": [1.0,0,0],
 			"speed": 200,
 			"jump": 1200,
-			"punch": 2.0
+			"punch": 1.0
 		},
 		"SNAKE": {
 			"color": [0,1.0,0],
 			"speed": 600,
 			"jump": 700,
-			"punch": 2.0
+			"punch": 1.0
 		},
 		"BEAR":  {
 			"color": [0,0,1.0],
 			"speed": 100,
 			"jump": 800,
-			"punch": 10.0
+			"punch": 5.0
 		}
 	}
 
@@ -257,7 +257,7 @@ func punch():
 
 func charge_punch():
 	$PunchIndicator.visible = true
-	$AnimationPlayer.play('punch_charge_bar')
+	$AnimationPlayer.play('punch_charge_bar', -1, punch)
 
 func set_holding(val):
 	holding = val
