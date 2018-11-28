@@ -20,12 +20,13 @@ func _physics_process(delta):
 	else:
 		position = player.global_position
 
-func _on_PlayerImpactDetector_area_entered(area):
-	if area.is_in_group('players'):
-		player = area
-		held = true
-		player.set_holding(true)
 
 func release(direction):
 	current_speed = direction
 	held = false
+
+func _on_PlayerImpactDetector_body_entered(body):
+	if body.is_in_group('players') and !body.stunned:
+		player = body
+		held = true
+		player.grab_ball(self)
