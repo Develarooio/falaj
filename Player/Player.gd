@@ -17,6 +17,9 @@ var stunned = false
 var health = 100
 var can_heal = true
 
+# utility members
+var frozen = false
+
 var current_speed = Vector2()
 export var player_number = 1
 var direction = 1
@@ -122,6 +125,11 @@ func assign_actions():
 ############
 
 func _physics_process(delta):
+
+	if frozen:
+		current_speed.x = 0
+		current_speed.y = 0
+		return
 
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
