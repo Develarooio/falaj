@@ -34,14 +34,13 @@ tracks/0/keys = {
 custom_solver_bias = 0.0
 extents = Vector2( 33, 33 )
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=4]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 10 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=5]
 
-resource_name = "punch_charge_bar"
 length = 1.0
 loop = false
 step = 0.1
@@ -70,7 +69,7 @@ tracks/1/keys = {
 "values": [ Vector2( -32, 0 ), Vector2( 0, 0 ) ]
 }
 
-[node name="Player" type="KinematicBody2D" index="0" groups=[
+[node name="Player" type="KinematicBody2D" groups=[
 "players",
 ]]
 
@@ -89,7 +88,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 
-visible = false
+editor/display_folded = true
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
@@ -124,6 +123,7 @@ shape = SubResource( 3 )
 
 [node name="Fist" type="Area2D" parent="." index="3"]
 
+visible = false
 z_index = 1
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -144,7 +144,7 @@ _sections_unfolded = [ "Offset", "Region", "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fist" index="1"]
 
 position = Vector2( 32, 0 )
-shape = SubResource( 5 )
+shape = SubResource( 4 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="PunchCoolDown" type="Timer" parent="." index="4"]
@@ -175,7 +175,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/punch_charge_bar = SubResource( 4 )
+anims/punch_charge_bar = SubResource( 5 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
