@@ -69,6 +69,7 @@ func stun():
 	
 	$Sprite/AnimationPlayer.play("shake")
 	$StunTimer.start()
+	$PunchIndicator.visible = false
 
 func _on_StunTimer_timeout():
 	stunned = false
@@ -124,24 +125,23 @@ func _physics_process(delta):
 
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
-	# early return and do no physics processing if currently stunned
-	
+
 	current_speed = move_and_slide(current_speed, UP)
 	
-	if Input.is_action_pressed(actions['right']):
+	if Input.is_action_pressed(actions['right']) and not stunned:
 		direction = 1
 		current_speed.x = min(current_speed.x + speed, max_speed)
-	elif Input.is_action_pressed(actions['left']):
+	elif Input.is_action_pressed(actions['left']) and not stunned:
 		direction = -1
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
 		
-	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
+	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding and not stunned:
 		#Charge Punch
 		charge_punch()
 		releasable = true
-	elif Input.is_action_just_released(actions['punch']) and releasable:
+	elif Input.is_action_just_released(actions['punch']) and releasable and not stunned:
 		#Release Punch
 		releasable = false
 		punch_strength = calc_punch_strength()
@@ -310,7 +310,12 @@ func calc_punch_strength():
 func set_holding(val):
 	holding = val
 	
+func inflict_knock_back(dir):
+	current_speed += Vector2(dir.x*.50, dir.y-250)
 
 func _on_Fist_body_entered(body):
 	if body.is_in_group('players') and self != body:
-		body.inflict_damage(round(punch_strength*100))
+		var damage = round(punch_strength*100)
+		body.inflict_damage(damage)
+		var direction = body.position - position
+		body.inflict_knock_back(direction*damage)
