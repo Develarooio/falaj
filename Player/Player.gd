@@ -3,6 +3,7 @@ extends KinematicBody2D
 var UP = Vector2(0, -1)
 
 var gravity = 25
+var punch_strength
 
 # Mutatable attributes
 var speed
@@ -68,6 +69,7 @@ func stun():
 	
 	$Sprite/AnimationPlayer.play("shake")
 	$StunTimer.start()
+	$PunchIndicator.visible = false
 
 func _on_StunTimer_timeout():
 	stunned = false
@@ -120,24 +122,31 @@ func assign_actions():
 ############
 
 func _physics_process(delta):
-	#if $PunchCoolDown.paused() == false:
-	#	print('punch is cooling down')
-		
+
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
-	# early return and do no physics processing if currently stunned
-	
+
 	current_speed = move_and_slide(current_speed, UP)
 	
-	if Input.is_action_pressed(actions['right']):
+	if Input.is_action_pressed(actions['right']) and not stunned:
 		direction = 1
 		current_speed.x = min(current_speed.x + speed, max_speed)
-	elif Input.is_action_pressed(actions['left']):
+	elif Input.is_action_pressed(actions['left']) and not stunned:
 		direction = -1
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
-
+		
+	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding and not stunned:
+		#Charge Punch
+		charge_punch()
+		releasable = true
+	elif Input.is_action_just_released(actions['punch']) and releasable and not stunned:
+		#Release Punch
+		releasable = false
+		punch_strength = calc_punch_strength()
+		punch()
+	
 	if is_on_floor():
 		if Input.is_action_pressed(actions['jump']):
 			current_speed.y -= jump
@@ -272,6 +281,7 @@ func _on_PunchCoolDown_timeout():
 	
 func _on_PunchDuration_timeout():
 	$Fist.visible = false
+	$Fist.monitoring = false
 	$PunchCoolDown.start()
 
 func punch():
@@ -287,11 +297,25 @@ func punch():
 	else:
 		$Fist.scale.x = -1
 	$Fist.visible = true
+	$Fist.monitoring = true
 	$PunchDuration.start()
 
 func charge_punch():
 	$PunchIndicator.visible = true
 	$AnimationPlayer.play('punch_charge_bar', -1, punch)
 
-func _on_PunchChargeDuration_timeout():
-	##Fully charged
+func calc_punch_strength():
+	return $AnimationPlayer.current_animation_position/$AnimationPlayer.current_animation_length
+
+func set_holding(val):
+	holding = val
+	
+func inflict_knock_back(dir):
+	current_speed += Vector2(dir.x*.50, dir.y-250)
+
+func _on_Fist_body_entered(body):
+	if body.is_in_group('players') and self != body:
+		var damage = round(punch_strength*100)
+		body.inflict_damage(damage)
+		var direction = body.position - position
+		body.inflict_knock_back(direction*damage)
