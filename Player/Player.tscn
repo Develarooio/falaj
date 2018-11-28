@@ -89,6 +89,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="Sprite" type="Sprite" parent="." index="1"]
 
 editor/display_folded = true
+
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
