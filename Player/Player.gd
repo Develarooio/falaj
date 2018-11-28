@@ -1,11 +1,8 @@
 extends KinematicBody2D
 
 var UP = Vector2(0, -1)
-var DEFAULT_BALL_POWER = 300
 
-var ball_power
 var gravity = 25
-
 
 # Mutatable attributes
 var speed
@@ -52,7 +49,7 @@ var entity_traits = {
 var mutation_state = []
 
 var can_punch = true
-var holding = false
+var ball = null
 
 func _ready():
 	randomize()
@@ -66,6 +63,9 @@ func _ready():
 
 func stun():
 	stunned = true
+	if is_carrying():
+		drop_ball()
+	
 	$Sprite/AnimationPlayer.play("shake")
 	$StunTimer.start()
 
@@ -126,9 +126,6 @@ func _physics_process(delta):
 	var friction = false
 	$TmpHealthLabel.set("text", str(health))
 	# early return and do no physics processing if currently stunned
-	if stunned:
-		current_speed.x = 0
-		return
 	
 	current_speed = move_and_slide(current_speed, UP)
 	
@@ -140,16 +137,7 @@ func _physics_process(delta):
 		current_speed.x = max(current_speed.x - speed, -max_speed)
 	else:
 		friction = true
-		
-	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding:
-		#Charge Punch
-		charge_punch()
-		releasable = true
-	elif Input.is_action_just_released(actions['punch']) and releasable:
-		#Release Punch
-		releasable = false
-		punch()
-	
+
 	if is_on_floor():
 		if Input.is_action_pressed(actions['jump']):
 			current_speed.y -= jump
@@ -158,6 +146,20 @@ func _physics_process(delta):
 	else:
 		current_speed.x = lerp(current_speed.x, 0, .2)
 		current_speed.y += gravity
+
+	if stunned:
+		current_speed.x = 0
+		return
+
+	if Input.is_action_just_pressed(actions['punch']) and can_punch:
+		#Charge Punch
+		charge_punch()
+		releasable = true
+	elif Input.is_action_just_released(actions['punch']) and releasable:
+		#Release Punch
+		releasable = false
+		punch()
+	
 
 ############
 # MUTATION #
@@ -238,6 +240,33 @@ func consume_mutator(mutator_type):
 	punch = new_punch
 	_set_comp_color(color)
 
+##################
+# BALL FUN TIMES #
+##################
+
+func drop_ball():
+	ball.release(current_speed)
+	ball = null
+
+func get_throw_strength():
+	# REIMPLEMENT THIS WHEN PUNCH CHARGE IS A REAL NUMBER
+	return 400
+
+func throw_ball():
+	print("thropwing")
+	ball.release(Vector2(direction*get_throw_strength(),0))
+	ball = null
+
+func grab_ball(new_ball):
+	ball = new_ball
+
+func is_carrying():
+	return ball != null
+
+############
+# PUNCHING #
+############
+
 func _on_PunchCoolDown_timeout():
 	can_punch = true
 	
@@ -246,6 +275,11 @@ func _on_PunchDuration_timeout():
 	$PunchCoolDown.start()
 
 func punch():
+	
+	if is_carrying():
+		throw_ball()
+		return
+	
 	$PunchIndicator.visible = false
 	can_punch = false
 	if direction == 1:
@@ -258,9 +292,6 @@ func punch():
 func charge_punch():
 	$PunchIndicator.visible = true
 	$AnimationPlayer.play('punch_charge_bar', -1, punch)
-
-func set_holding(val):
-	holding = val
 
 func _on_PunchChargeDuration_timeout():
 	##Fully charged

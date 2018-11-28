@@ -4,6 +4,4 @@
 
 [node name="Player1" instance=ExtResource( 1 )]
 
-collision_layer = 2
-
 
