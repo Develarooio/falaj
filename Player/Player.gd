@@ -145,7 +145,7 @@ func _physics_process(delta):
 	else:
 		friction = true
 		
-	if Input.is_action_just_pressed(actions['punch']) and can_punch and not holding and not stunned:
+	if Input.is_action_just_pressed(actions['punch']) and can_punch and not is_carrying() and not stunned:
 		#Charge Punch
 		charge_punch()
 		releasable = true
@@ -156,7 +156,7 @@ func _physics_process(delta):
 		punch()
 	
 	if is_on_floor():
-		if Input.is_action_pressed(actions['jump']):
+		if Input.is_action_pressed(actions['jump']) and not stunned:
 			current_speed.y -= jump
 		if friction:
 			current_speed.x = lerp(current_speed.x, 0, .3)
@@ -267,11 +267,11 @@ func drop_ball():
 
 func get_throw_strength():
 	# REIMPLEMENT THIS WHEN PUNCH CHARGE IS A REAL NUMBER
-	return 400
+	return punch_strength * 500
 
 func throw_ball():
-	print("thropwing")
-	ball.release(Vector2(direction*get_throw_strength(),0))
+	$PunchIndicator.visible = false
+	ball.release(Vector2(direction*get_throw_strength(),get_throw_strength()*-1.5))
 	ball = null
 
 func grab_ball(new_ball):
@@ -315,13 +315,12 @@ func charge_punch():
 func calc_punch_strength():
 	return $AnimationPlayer.current_animation_position/$AnimationPlayer.current_animation_length
 
-func set_holding(val):
-	holding = val
 	
 func inflict_knock_back(dir):
 	current_speed += Vector2(dir.x*.50, dir.y-250)
 
 func _on_Fist_body_entered(body):
+	print("body entered")
 	if body.is_in_group('players') and self != body:
 		var damage = round(punch_strength*100)
 		body.inflict_damage(damage)
