@@ -1,8 +1,5 @@
 extends Area2D
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
 var dormant;
 
 func _ready():
@@ -19,7 +16,6 @@ func consume():
 	$Sprite.set("modulate", Color(255,255,255,0))
 
 func reset():
-	print("resetting")
 	dormant = false
 	$RespawnTimer.stop()
 	$Sprite.set("modulate", get_color())
