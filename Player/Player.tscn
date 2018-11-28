@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/blue_player_box.png" type="Texture" id=2]
-[ext_resource path="res://Player/BallPunch.gd" type="Script" id=3]
-[ext_resource path="res://Mutators/default_square.png" type="Texture" id=4]
+[ext_resource path="res://Mutators/default_square.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -28,11 +27,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ) ]
 }
-
-[sub_resource type="RectangleShape2D" id=3]
-
-custom_solver_bias = 0.0
-extents = Vector2( 33, 33 )
 
 [sub_resource type="RectangleShape2D" id=4]
 
@@ -69,7 +63,7 @@ tracks/1/keys = {
 "values": [ Vector2( -32, 0 ), Vector2( 0, 0 ) ]
 }
 
-[node name="Player" type="KinematicBody2D" index="0" groups=[
+[node name="Player" type="KinematicBody2D" groups=[
 "players",
 ]]
 
@@ -102,26 +96,7 @@ playback_speed = 1.0
 anims/shake = SubResource( 2 )
 blend_times = [  ]
 
-[node name="Detector" type="Area2D" parent="." index="2" groups=[
-"players",
-]]
-
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-script = ExtResource( 3 )
-_sections_unfolded = [ "Collision" ]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector" index="0"]
-
-position = Vector2( 0.329468, 0 )
-shape = SubResource( 3 )
-
-[node name="Fist" type="Area2D" parent="." index="3"]
+[node name="Fist" type="Area2D" parent="." index="2"]
 
 visible = false
 z_index = 1
@@ -130,9 +105,12 @@ gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
 linear_damp = 0.1
 angular_damp = 1.0
+monitoring = false
+collision_layer = 2
+collision_mask = 2
 audio_bus_override = false
 audio_bus_name = "Master"
-_sections_unfolded = [ "Transform", "Z Index" ]
+_sections_unfolded = [ "Collision", "Transform", "Z Index" ]
 
 [node name="Sprite" type="Sprite" parent="Fist" index="0"]
 
@@ -147,28 +125,28 @@ position = Vector2( 32, 0 )
 shape = SubResource( 4 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="PunchCoolDown" type="Timer" parent="." index="4"]
+[node name="PunchCoolDown" type="Timer" parent="." index="3"]
 
 process_mode = 1
 wait_time = 0.3
 one_shot = true
 autostart = false
 
-[node name="PunchDuration" type="Timer" parent="." index="5"]
+[node name="PunchDuration" type="Timer" parent="." index="4"]
 
 process_mode = 1
 wait_time = 0.2
 one_shot = true
 autostart = false
 
-[node name="PunchChargeDuration" type="Timer" parent="." index="6"]
+[node name="PunchChargeDuration" type="Timer" parent="." index="5"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = true
 autostart = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="6"]
 
 root_node = NodePath("..")
 autoplay = ""
@@ -179,45 +157,45 @@ anims/punch_charge_bar = SubResource( 5 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
-[node name="PunchIndicator" type="Sprite" parent="." index="8"]
+[node name="PunchIndicator" type="Sprite" parent="." index="7"]
 
 visible = false
 scale = Vector2( 1, 0.2 )
 z_index = 2
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 offset = Vector2( 0, -210 )
 _sections_unfolded = [ "Offset", "Transform", "Visibility", "Z Index" ]
 
-[node name="CompositionIndicator" type="Sprite" parent="." index="9"]
+[node name="CompositionIndicator" type="Sprite" parent="." index="8"]
 
 position = Vector2( 3.05176e-05, -76.1108 )
 scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 8, 8 )
 _sections_unfolded = [ "Region", "Transform", "Visibility" ]
 
-[node name="StunTimer" type="Timer" parent="." index="10"]
+[node name="StunTimer" type="Timer" parent="." index="9"]
 
 process_mode = 1
 wait_time = 3.0
 one_shot = true
 autostart = false
 
-[node name="HPRechargeIncTimer" type="Timer" parent="." index="11"]
+[node name="HPRechargeIncTimer" type="Timer" parent="." index="10"]
 
 process_mode = 1
 wait_time = 0.1
 one_shot = false
 autostart = false
 
-[node name="HPRechargeDebounceTimer" type="Timer" parent="." index="12"]
+[node name="HPRechargeDebounceTimer" type="Timer" parent="." index="11"]
 
 process_mode = 1
 wait_time = 3.0
 one_shot = false
 autostart = false
 
-[node name="TmpHealthLabel" type="Label" parent="." index="13"]
+[node name="TmpHealthLabel" type="Label" parent="." index="12"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -238,7 +216,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Debouncing" type="Label" parent="." index="14"]
+[node name="Debouncing" type="Label" parent="." index="13"]
 
 visible = false
 anchor_left = 0.0
@@ -260,7 +238,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[connection signal="area_entered" from="Detector" to="." method="_on_Detector_area_entered"]
+[connection signal="body_entered" from="Fist" to="." method="_on_Fist_body_entered"]
 
 [connection signal="timeout" from="PunchCoolDown" to="." method="_on_PunchCoolDown_timeout"]
 
