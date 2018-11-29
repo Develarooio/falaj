@@ -5,7 +5,7 @@ export var player_number = 1
 # Player textures
 
 var player_1_texture = preload("res://Player/blue_player_box.png")
-var player_2_texture = preload("res://Player/player2_red_square.png")
+var player_2_texture = preload("res://Mutators/bird_square.png")
 signal win_match
 
 func _ready():

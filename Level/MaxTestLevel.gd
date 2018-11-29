@@ -10,4 +10,3 @@ func win_match(player):
 	$WINTEXT.text = "Player " + str(player.player_number) + " WON"
 	$WINTEXT.show()
 	player.frozen = true
-

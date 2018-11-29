@@ -18,7 +18,7 @@ func _physics_process(delta):
 		else:
 			current_speed.y += gravity
 	else:
-		position = player.global_position
+		position = 2*player.global_position
 
 
 func release(direction):
