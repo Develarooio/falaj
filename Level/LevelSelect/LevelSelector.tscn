@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Level/LevelSelect/Level1Select.tscn" type="PackedScene" id=1]
 
-[node name="LevelSelector" type="Node2D" index="0"]
+[node name="LevelSelector" type="Node2D"]
 
 [node name="Label" type="Label" parent="." index="0"]
 
