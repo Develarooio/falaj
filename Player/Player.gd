@@ -32,19 +32,19 @@ var actions = {}
 var entity_traits = {
 		"BIRD": {
 			"color": [1.0,0,0],
-			"speed": 200,
-			"jump": 1200,
+			"speed": 700,
+			"jump": 900,
 			"punch": 1.0
 		},
 		"SNAKE": {
 			"color": [0,1.0,0],
-			"speed": 600,
+			"speed": 1000,
 			"jump": 700,
 			"punch": 1.0
 		},
 		"BEAR":  {
 			"color": [0,0,1.0],
-			"speed": 100,
+			"speed": 500,
 			"jump": 800,
 			"punch": 5.0
 		}
@@ -124,6 +124,12 @@ func assign_actions():
 # MOVEMENT #
 ############
 
+func get_speed():
+	if is_carrying():
+		return speed / 2
+	else:
+		return speed
+
 func _physics_process(delta):
 
 	if frozen:
@@ -138,10 +144,10 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed(actions['right']) and not stunned:
 		direction = 1
-		current_speed.x = min(current_speed.x + speed, max_speed)
+		current_speed.x = min(current_speed.x + 300, get_speed())
 	elif Input.is_action_pressed(actions['left']) and not stunned:
 		direction = -1
-		current_speed.x = max(current_speed.x - speed, -max_speed)
+		current_speed.x = max(current_speed.x - 300, -get_speed())
 	else:
 		friction = true
 		
@@ -161,7 +167,7 @@ func _physics_process(delta):
 		if friction:
 			current_speed.x = lerp(current_speed.x, 0, .3)
 	else:
-		current_speed.x = lerp(current_speed.x, 0, .2)
+		current_speed.x = lerp(current_speed.x, 0, .6)
 		current_speed.y += gravity
 
 	if stunned:
@@ -320,7 +326,6 @@ func inflict_knock_back(dir):
 	current_speed += Vector2(dir.x*.50, dir.y-250)
 
 func _on_Fist_body_entered(body):
-	print("body entered")
 	if body.is_in_group('players') and self != body:
 		var damage = round(punch_strength*100)
 		body.inflict_damage(damage)

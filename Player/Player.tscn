@@ -25,15 +25,15 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 10, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
-extents = Vector2( 32, 10 )
+extents = Vector2( 60, 60 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 
 length = 1.0
 loop = false
@@ -82,7 +82,6 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 
-editor/display_folded = true
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
@@ -98,6 +97,7 @@ blend_times = [  ]
 
 [node name="Fist" type="Area2D" parent="." index="2"]
 
+editor/display_folded = true
 visible = false
 z_index = 1
 input_pickable = true
@@ -112,18 +112,23 @@ audio_bus_override = false
 audio_bus_name = "Master"
 _sections_unfolded = [ "Collision", "Transform", "Z Index" ]
 
-[node name="Sprite" type="Sprite" parent="Fist" index="0"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fist" index="0"]
 
-position = Vector2( 32, 0 )
-scale = Vector2( 1, 0.33 )
+scale = Vector2( 1.7619, 1.80952 )
+shape = SubResource( 3 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Fist" index="1"]
+
+scale = Vector2( 1.7619, 1.80952 )
+shape = SubResource( 3 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite" type="Sprite" parent="Fist" index="2"]
+
+scale = Vector2( 3.5, 3.53125 )
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Offset", "Region", "Transform" ]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Fist" index="1"]
-
-position = Vector2( 32, 0 )
-shape = SubResource( 4 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="PunchCoolDown" type="Timer" parent="." index="3"]
 
@@ -153,7 +158,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/punch_charge_bar = SubResource( 5 )
+anims/punch_charge_bar = SubResource( 4 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -168,8 +173,7 @@ _sections_unfolded = [ "Offset", "Transform", "Visibility", "Z Index" ]
 
 [node name="CompositionIndicator" type="Sprite" parent="." index="8"]
 
-position = Vector2( 3.05176e-05, -76.1108 )
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.8, 0.8 )
 texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 8, 8 )
 _sections_unfolded = [ "Region", "Transform", "Visibility" ]
@@ -177,7 +181,7 @@ _sections_unfolded = [ "Region", "Transform", "Visibility" ]
 [node name="StunTimer" type="Timer" parent="." index="9"]
 
 process_mode = 1
-wait_time = 3.0
+wait_time = 2.0
 one_shot = true
 autostart = false
 

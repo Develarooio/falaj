@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Player/player2_red_square.png" type="Texture" id=2]
+[ext_resource path="res://Mutators/bird_square.png" type="Texture" id=2]
 
 [node name="Player2" instance=ExtResource( 1 )]
 
@@ -10,8 +10,13 @@ player_number = 2
 [node name="Sprite" parent="." index="1"]
 
 texture = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Transform", "Visibility" ]
 
-[node name="Sprite" parent="Fist" index="0"]
+[node name="Fist" parent="." index="2"]
+
+editor/display_folded = false
+
+[node name="Sprite" parent="Fist" index="2"]
 
 texture = ExtResource( 2 )
 

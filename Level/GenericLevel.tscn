@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://GenericLevel.gd" type="Script" id=1]
+[ext_resource path="res://Tilesets/basic_black_wall.tres" type="TileSet" id=2]
+[ext_resource path="res://Mutators/default_square.png" type="Texture" id=3]
+[ext_resource path="res://Ball/Ball.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Goal/Goal.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Player/Player1.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Player/Player2.tscn" type="PackedScene" id=7]
+
+[node name="GenericLevel" type="Node2D" index="0"]
+
+scale = Vector2( 0.5, 0.5 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="TileMap" type="TileMap" parent="." index="0"]
+
+mode = 0
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 64, 64 )
+cell_quadrant_size = 16
+cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+cell_half_offset = 2
+cell_tile_origin = 0
+cell_y_sort = false
+cell_clip_uv = false
+collision_use_kinematic = false
+collision_friction = 1.0
+collision_bounce = 0.0
+collision_layer = 3
+collision_mask = 3
+occluder_light_mask = 1
+format = 1
+tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, -65527, 0, 0, -65526, 0, 0, -65525, 0, 0, -65524, 0, 0, -65523, 0, 0, -65522, 0, 0, -65521, 0, 0, -65520, 0, 0, -65519, 0, 0, -65518, 0, 0, -65517, 0, 0, -65516, 0, 0, -65515, 0, 0, -65514, 0, 0, -65513, 0, 0, -65512, 0, 0, -65511, 0, 0, -65510, 0, 0, -65509, 0, 0, -65508, 0, 0, -65507, 0, 0, -65506, 0, 0, -65505, 0, 0, -65504, 0, 0, 65535, 0, 0, 32, 0, 0, 131071, 0, 0, 65568, 0, 0, 196607, 0, 0, 131104, 0, 0, 262143, 0, 0, 196640, 0, 0, 327679, 0, 0, 262176, 0, 0, 393215, 0, 0, 327712, 0, 0, 458751, 0, 0, 393248, 0, 0, 524287, 0, 0, 458784, 0, 0, 589823, 0, 0, 524320, 0, 0, 655359, 0, 0, 589856, 0, 0, 720895, 0, 0, 655392, 0, 0, 786431, 0, 0, 720928, 0, 0, 851967, 0, 0, 786464, 0, 0, 917503, 0, 0, 852000, 0, 0, 983039, 0, 0, 917536, 0, 0, 1048575, 0, 0, 983072, 0, 0, 1114111, 0, 0, 1048608, 0, 0, 1179647, 0, 0, 1114144, 0, 0, 1245183, 0, 0, 1179680, 0, 0, 1310719, 0, 0, 1245216, 0, 0, 1376255, 0, 0, 1310752, 0, 0, 1441791, 0, 0, 1376288, 0, 0, 1507327, 0, 0, 1441824, 0, 0, 1572863, 0, 0, 1507360, 0, 0, 1638399, 0, 0, 1572864, 0, 0, 1572865, 0, 0, 1572866, 0, 0, 1572867, 0, 0, 1572868, 0, 0, 1572869, 0, 0, 1572870, 0, 0, 1572871, 0, 0, 1572872, 0, 0, 1572873, 0, 0, 1572874, 0, 0, 1572875, 0, 0, 1572876, 0, 0, 1572877, 0, 0, 1572878, 0, 0, 1572879, 0, 0, 1572880, 0, 0, 1572881, 0, 0, 1572882, 0, 0, 1572883, 0, 0, 1572884, 0, 0, 1572885, 0, 0, 1572886, 0, 0, 1572887, 0, 0, 1572888, 0, 0, 1572889, 0, 0, 1572890, 0, 0, 1572891, 0, 0, 1572892, 0, 0, 1572893, 0, 0, 1572894, 0, 0, 1572895, 0, 0, 1572896, 0, 0 )
+_sections_unfolded = [ "Collision" ]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="bg" type="Sprite" parent="." index="1"]
+
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1026.67, 770.26 )
+scale = Vector2( 33.0836, 25.0706 )
+z_index = -69
+texture = ExtResource( 3 )
+_sections_unfolded = [ "Visibility" ]
+
+[node name="Ball" parent="." index="2" instance=ExtResource( 4 )]
+
+position = Vector2( 377, 257 )
+
+[node name="Goal1" parent="." index="3" instance=ExtResource( 5 )]
+
+position = Vector2( 324, 144 )
+
+[node name="Goal2" parent="." index="4" instance=ExtResource( 5 )]
+
+position = Vector2( 475, 147 )
+player_number = 2
+
+[node name="WINTEXT" type="Label" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 554.0
+margin_top = 662.0
+margin_right = 650.0
+margin_bottom = 730.0
+rect_scale = Vector2( 10, 10 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Rect" ]
+
+[node name="Player1" parent="." index="6" instance=ExtResource( 6 )]
+
+position = Vector2( 319, 371 )
+
+[node name="Player2" parent="." index="7" instance=ExtResource( 7 )]
+
+position = Vector2( 433, 372 )
+
+
