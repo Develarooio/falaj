@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Level/LevelSelect/Level1Select.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Level/LevelSelect/Level2Select.tscn" type="PackedScene" id=2]
 
-[node name="LevelSelector" type="Node2D"]
+[node name="LevelSelector" type="Node2D" index="0"]
 
 [node name="Label" type="Label" parent="." index="0"]
 
@@ -27,6 +28,10 @@ max_lines_visible = -1
 
 [node name="Level1select" parent="." index="1" instance=ExtResource( 1 )]
 
-position = Vector2( 32.649, 46.2527 )
+position = Vector2( 72.0998, 40.8112 )
+
+[node name="Level2Select" parent="." index="2" instance=ExtResource( 2 )]
+
+position = Vector2( 555.033, 42.1716 )
 
 
