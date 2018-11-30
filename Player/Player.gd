@@ -86,12 +86,10 @@ func _on_HPRechargeIncTimer_timeout():
 
 func _on_HPRechargeDebounceTimer_timeout():
 	# start healing
-	$Debouncing.hide()
 	if not stunned:
 		$HPRechargeIncTimer.start()
 
 func _debounce_heal():
-	$Debouncing.show()
 	$HPRechargeDebounceTimer.start()
 
 func inflict_damage(dmg):
@@ -138,7 +136,7 @@ func _physics_process(delta):
 		return
 
 	var friction = false
-	$TmpHealthLabel.set("text", str(health))
+	$Health.scale.x = health/100
 
 	current_speed = move_and_slide(current_speed, UP)
 	
