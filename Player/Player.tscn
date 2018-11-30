@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/blue_player_box.png" type="Texture" id=2]
 [ext_resource path="res://Mutators/default_square.png" type="Texture" id=3]
+[ext_resource path="res://Player/player2_red_square.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -97,7 +98,6 @@ blend_times = [  ]
 
 [node name="Fist" type="Area2D" parent="." index="2"]
 
-editor/display_folded = true
 visible = false
 z_index = 1
 input_pickable = true
@@ -199,48 +199,18 @@ wait_time = 3.0
 one_shot = false
 autostart = false
 
-[node name="TmpHealthLabel" type="Label" parent="." index="12"]
+[node name="Health" type="Sprite" parent="." index="12"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = -19.0
-margin_top = -30.0
-margin_right = 21.0
-margin_bottom = -16.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "asdf"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+position = Vector2( 0, -30 )
+scale = Vector2( 1, 0.2 )
+texture = ExtResource( 4 )
+offset = Vector2( 0, -128 )
+_sections_unfolded = [ "Offset", "Transform" ]
 
-[node name="Debouncing" type="Label" parent="." index="13"]
+[node name="Stunned" type="Sprite" parent="." index="13"]
 
 visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = -18.0
-margin_top = 13.0
-margin_right = 22.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "debouncing"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+texture = ExtResource( 3 )
 
 [connection signal="body_entered" from="Fist" to="." method="_on_Fist_body_entered"]
 
