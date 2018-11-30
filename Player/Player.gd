@@ -67,6 +67,7 @@ func _ready():
 
 func stun():
 	stunned = true
+	$Stunned.show()
 	if is_carrying():
 		drop_ball()
 	
@@ -75,6 +76,7 @@ func stun():
 	$PunchIndicator.visible = false
 
 func _on_StunTimer_timeout():
+	$Stunned.hide()
 	stunned = false
 	$HPRechargeIncTimer.start()
 
