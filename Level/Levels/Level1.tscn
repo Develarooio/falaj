@@ -25,6 +25,8 @@ position = Vector2( 1378.84, 187.941 )
 
 [node name="WINTEXT" parent="." index="5"]
 
+margin_left = 540.0
+margin_right = 636.0
 _sections_unfolded = [ "Rect", "Theme" ]
 
 [node name="Player1" parent="." index="6"]
