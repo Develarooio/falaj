@@ -131,8 +131,10 @@ func get_speed():
 		return speed
 
 func _physics_process(delta):
+	check_for_quit()
 
 	if frozen:
+		play_again()
 		current_speed.x = 0
 		current_speed.y = 0
 		return
@@ -183,6 +185,19 @@ func _physics_process(delta):
 		releasable = false
 		punch()
 	
+
+func play_again():
+	if Input.is_action_pressed('menu'):
+		#Main Menu
+		pass
+	elif Input.is_action_pressed('quit'):
+		get_tree().quit()
+	elif Input.is_action_pressed('retry'):
+		get_tree().change_scene(get_parent().filename)
+		
+func check_for_quit():
+	if Input.is_action_pressed('quit'):
+		get_tree().quit()
 
 ############
 # MUTATION #
