@@ -188,8 +188,8 @@ func _physics_process(delta):
 
 func play_again():
 	if Input.is_action_pressed('menu'):
-		#Main Menu
-		pass
+		#Main Menu, right now level select
+		get_tree().change_scene('res://Level/LevelSelect/LevelSelector.tscn')
 	elif Input.is_action_pressed('quit'):
 		get_tree().quit()
 	elif Input.is_action_pressed('retry'):
