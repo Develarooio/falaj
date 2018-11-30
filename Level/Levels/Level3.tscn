@@ -23,6 +23,13 @@ position = Vector2( 898.077, 1523.42 )
 
 position = Vector2( 1087.17, 1520.98 )
 
+[node name="WINTEXT" parent="." index="5"]
+
+margin_left = 546.0
+margin_top = 706.0
+margin_right = 642.0
+margin_bottom = 774.0
+
 [node name="Player1" parent="." index="6"]
 
 position = Vector2( 1875.27, 330.189 )
